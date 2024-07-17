@@ -44,8 +44,6 @@ const db = require('./db')
 const bodyParser = require('body-parser');
 app.use(bodyParser.json()); //req.body
 
-const Person = require('./models/Person');
-const MenuItem = require('./models/Menu');
 
 app.get('/', function(req,res){
     res.send('helloo welcom! how can i help u')
@@ -95,36 +93,19 @@ app.get('/', function(req,res){
 //     })
 // })
 
-// POST route to add a person
-app.post('/person', async (req, res) => {
-    try {
-        const data = req.body; // Assuming the request body contains the person data
 
-        // Create a new Person document using the Mongoose model
-        const newPerson = new Person(data);
 
-        // Save the new person
-        const response = await newPerson.save();
-        console.log('Data saved successfully');
-        res.status(200).json(response);
-    } catch (err) {
-        console.log('Error:', err);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
+//import the router files
+const personRoutes = require('./routes/personroutes');
 
-//GET method
-app.get('/person', async (req,res)=>{
-    try{
-      const data = await Person.find();
-      console.log('Data fetched successfully');
-        res.status(200).json(data);
-    }catch(err){
-        console.log('Error:', err);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-})
+//use the router
+app.use('/person', personRoutes);
 
+//import the menu router
+const menuRouter = require ('./routes/menuRoutes')
+
+//use the menu routes
+app.use('/menu', menuRouter);
 
 app.listen(3000,()=>{
     console.log('server is running at 3000 port')
