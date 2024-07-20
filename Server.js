@@ -84,6 +84,7 @@ passport.use(new LocalStrategy(async (username, password,done)=>{
 
 app.use(passport.initialize());
 
+//now we are using jwt so dont require this anymore
 const localAuthMiddleware = passport.authenticate('local' , {session : false})
 
 app.get('/', function(req,res){
@@ -140,7 +141,7 @@ app.get('/', function(req,res){
 const personRoutes = require('./routes/personroutes');
 
 //use the router
-app.use('/person',localAuthMiddleware, personRoutes);
+app.use('/person', personRoutes);
 
 //import the menu router
 const menuRouter = require ('./routes/menuRoutes')
